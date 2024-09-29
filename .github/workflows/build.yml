@@ -43,6 +43,8 @@ jobs:
         with:
           file: ./v16/postgres_${{ matrix.engines.image }}.docker
           context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: ${{ github.event_name == 'push' }}
           tags: |
             ${{ env.REGISTRY }}/intellua/datero-docker-images/datero-${{ matrix.engines.image }}:latest
@@ -68,6 +70,8 @@ jobs:
         with:
           file: ./datero/datero_engine_v16.docker
           context: .
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: ${{ github.event_name == 'push' }}
           build-args: |
             base_tag=16.4

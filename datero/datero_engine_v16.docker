@@ -7,7 +7,7 @@ ARG sqlite_tag
 ARG redis_tag
 ARG duckdb_tag
 
-FROM docker.io/chumaky/postgres_tds_fdw:${base_tag}_${tds_tag}        AS tds
+FROM docker.io/chumaky/postgres_tds_fdw:16.3_${tds_tag}        AS tds
 FROM ${mysql_tag}    AS mysql
 FROM ${oracle_tag}  AS oracle
 FROM ${mongo_tag}    AS mongo
