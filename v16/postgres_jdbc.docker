@@ -1,4 +1,4 @@
-ARG base_tag=16.4
+ARG base_tag
 FROM postgres:${base_tag}
 
 ARG JDBC_FDW_VERSION=0.4.0
