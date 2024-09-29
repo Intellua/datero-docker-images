@@ -48,9 +48,9 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-${{ matrix.engines.image }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-${{ matrix.engines.image }}:${{github.run_number}}
           outputs: ${{ github.event_name == 'pull_request' && 'type=cacheonly' || 'type=registry,push=true' }}
-  DeployDev:
+  BuildDatero:
     name: "Build Datero"
-    needs: BuildDatero
+    needs: BuildSpecificImages
     runs-on: ubuntu-latest
     permissions:
       contents: read
