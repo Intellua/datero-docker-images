@@ -11,6 +11,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  BASE_VERSION: 16.4
 
 jobs:
   BuildSpecificImages:
@@ -44,7 +45,7 @@ jobs:
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
       - uses: docker/build-push-action@v6
         with:
           file: ./v16/postgres_${{ matrix.engines.image }}.docker
@@ -52,7 +53,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name == 'push' }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           tags: |
             ${{ env.REGISTRY }}/intellua/datero-docker-images/datero-${{ matrix.engines.image }}:latest
             ${{ env.REGISTRY }}/intellua/datero-docker-images/datero-${{ matrix.engines.image }}:${{github.run_number}}
@@ -78,7 +79,7 @@ jobs:
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64
       - uses: docker/build-push-action@v6
         with:
           file: ./datero/datero_engine_v16.docker
@@ -86,11 +87,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: ${{ github.event_name == 'push' }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           build-args: |
-            base_tag=16.4
+            base_tag=${{ env.BASE_VERSION }}
             mongo_tag=${{ env.REGISTRY }}/intellua/datero-docker-images/datero-mongo:${{github.run_number}}
             mysql_tag=${{ env.REGISTRY }}/intellua/datero-docker-images/datero-mysql:${{github.run_number}}
+            mssql_tag=${{ env.REGISTRY }}/intellua/datero-docker-images/datero-mssql:${{github.run_number}}
             oracle_tag=${{ env.REGISTRY }}/intellua/datero-docker-images/datero-oracle:${{github.run_number}}
             sqlite_tag=${{ env.REGISTRY }}/intellua/datero-docker-images/datero-sqlite:${{github.run_number}}
             redis_tag=${{ env.REGISTRY }}/intellua/datero-docker-images/datero-redis:${{github.run_number}}

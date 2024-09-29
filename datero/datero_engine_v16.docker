@@ -1,13 +1,13 @@
 ARG base_tag
 ARG mongo_tag
-ARG tds_tag=fdw2.0.3
+ARG mssql_tag
 ARG mysql_tag
 ARG oracle_tag
 ARG sqlite_tag
 ARG redis_tag
 ARG duckdb_tag
 
-FROM docker.io/chumaky/postgres_tds_fdw:16.3_${tds_tag}        AS tds
+FROM ${mssql_tag}        AS tds
 FROM ${mysql_tag}    AS mysql
 FROM ${oracle_tag}  AS oracle
 FROM ${mongo_tag}    AS mongo
