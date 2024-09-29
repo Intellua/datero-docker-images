@@ -3,7 +3,7 @@ Postgres database images with different foreign data wrapper (FDW) extensions in
 Individual images with single FDW installed are used as a building blocks for the all inclusive image which contains all FDWs.
 Multiple FDWs allow to access data from different by nature datasources within single `SELECT` statement.
 
-In terms of classical definitions, it turns `postgres` into a [federated database system](https://en.wikipedia.org/wiki/Federated_database_system) which implements [SQL/MED](https://en.wikipedia.org/wiki/SQL/MED) extension of `SQL` standard. 
+In terms of classical definitions, it turns `postgres` into a [federated database system](https://en.wikipedia.org/wiki/Federated_database_system) which implements [SQL/MED](https://en.wikipedia.org/wiki/SQL/MED) extension of `SQL` standard.
 In more modern terms, it implements [data virtualization](https://en.wikipedia.org/wiki/Data_virtualization) feature.
 
 > ## LATEST UPDATES
@@ -110,6 +110,7 @@ Tag naming pattern is `<postgres_version>_fdw<fdw_version>`. For example, `15.2_
   Image|Tag
   -|-
   postgres_oracle_fdw|latest
+  postgres_oracle_fdw|16.4_fdw2.6.0
   postgres_oracle_fdw|16.3_fdw2.6.0
   postgres_oracle_fdw|16.2_fdw2.6.0
   postgres_oracle_fdw|15.2_fdw2.5.0
@@ -117,6 +118,7 @@ Tag naming pattern is `<postgres_version>_fdw<fdw_version>`. For example, `15.2_
   Image|Tag
   -|-
   postgres_mssql_fdw|latest
+  postgres_mssql_fdw|16.4_fdw2.0.3 (from master branch)
   postgres_mssql_fdw|16.3_fdw2.0.3 (from master branch)
   postgres_mssql_fdw|16.2_fdw2.0.3 (from master branch)
   postgres_mssql_fdw|15.2_fdw2.0.3
@@ -124,6 +126,7 @@ Tag naming pattern is `<postgres_version>_fdw<fdw_version>`. For example, `15.2_
   Image|Tag
   -|-
   postgres_tds_fdw|latest
+  postgres_tds_fdw|16.4_fdw2.0.3 (from master branch)
   postgres_tds_fdw|16.3_fdw2.0.3 (from master branch)
   postgres_tds_fdw|16.2_fdw2.0.3 (from master branch)
   postgres_tds_fdw|15.2_fdw2.0.3
@@ -131,6 +134,7 @@ Tag naming pattern is `<postgres_version>_fdw<fdw_version>`. For example, `15.2_
   Image|Tag
   -|-
   postgres_mongo_fdw|latest
+  postgres_mongo_fdw|16.4_fdw5.5.1
   postgres_mongo_fdw|16.3_fdw5.5.1
   postgres_mongo_fdw|16.2_fdw5.5.1
   postgres_mongo_fdw|15.2_fdw5.5.0
@@ -143,12 +147,14 @@ Tag naming pattern is `<postgres_version>_fdw<fdw_version>`. For example, `15.2_
   Image|Tag
   -|-
   postgres_jdbc_fdw|latest
+  postgres_jdbc_fdw|16.4_fdw0.4.0
   postgres_jdbc_fdw|16.3_fdw0.4.0
   postgres_jdbc_fdw|16.2_fdw0.4.0
 
   Image|Tag|DuckDB lib version
   -|-|-
   postgres_duckdb_fdw|latest|1.0.0
+  postgres_duckdb_fdw|16.4_fdw1.0.0|1.0.0
   postgres_duckdb_fdw|16.3_fdw1.0.0|1.0.0
   postgres_duckdb_fdw|16.2_fdw1.0.0|1.0.0
   postgres_duckdb_fdw|16.2_fdw2.1.1|0.10.2
@@ -199,6 +205,7 @@ Tag naming pattern corresponds one to one to the official postgres tags.
 Image|Tag|Postgres
 -|-|-
 datero_engine|latest|16.3
+datero_engine|16.4|16.4
 datero_engine|16.3|16.3
 datero_engine|16.2|16.2
 datero_engine|15.2|15.2
@@ -217,6 +224,7 @@ They are part of the official postgres distribution.
 
   Datero|Postgres|FDW|Version
   -|-|-|-
+  16.4|16.4|mysql_fdw|2.9.1
   16.3|16.3|mysql_fdw|2.9.1
   16.3|16.3|oracle_fdw|2.6.0
   16.3|16.3|sqlite_fdw|2.4.0
@@ -283,8 +291,8 @@ But there is no guarantee that it will cleanup everything.
 Hence, added size is not 100% consist of actual compiled FDW binaries.
 
 The FDW images that blows up in size the most are `postgres_jdbc_fdw` and `postgres_oracle_fdw`.
-The `postgres_jdbc_fdw` image requires JRE to be installed. 
-This is the main reason for the size increase. 
+The `postgres_jdbc_fdw` image requires JRE to be installed.
+This is the main reason for the size increase.
 As for `postgres_oracle_fdw`, it requires oracle client to be present on the host machine.
 The most minimal in size oracle client is _basic_ instant client. But even it adds 81 MB to the image size.
 

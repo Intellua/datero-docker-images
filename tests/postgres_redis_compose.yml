@@ -3,26 +3,25 @@ services:
     image: docker.io/redis:latest
     container_name: redis
     ports:
-    - 6379:6379
+      - 6379:6379
 
   redis_seed:
     image: docker.io/redis:latest
     container_name: redis_seed
     volumes:
-    - ./scripts/redis_load_data.sh:/usr/local/bin/load_data.sh
+      - ./scripts/redis_load_data.sh:/usr/local/bin/load_data.sh
     depends_on:
-    - redis
+      - redis
     command: sh -c "chmod +x /usr/local/bin/load_data.sh && /usr/local/bin/load_data.sh"
 
   postgres:
-    image: docker.io/chumaky/postgres_redis_fdw:16.3_fdw16.3.0
+    image: docker.io/chumaky/postgres_redis_fdw:16.4_fdw16.4.0
     container_name: postgres
     environment:
       POSTGRES_PASSWORD: postgres
     ports:
-    - 5432:5432
+      - 5432:5432
     volumes:
-    - ./sql/postgres_redis_setup.sql:/docker-entrypoint-initdb.d/postgres_redis_setup.sql
+      - ./sql/postgres_redis_setup.sql:/docker-entrypoint-initdb.d/postgres_redis_setup.sql
     depends_on:
-    - redis_seed
-
+      - redis_seed

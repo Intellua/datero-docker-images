@@ -1,4 +1,4 @@
-ARG base_tag=16.3
+ARG base_tag=16.4
 FROM postgres:${base_tag}
 
 ARG JDBC_FDW_VERSION=0.4.0
@@ -30,6 +30,6 @@ RUN apt-get install -y --no-install-recommends wget ca-certificates \
     apt-get install -y --no-install-recommends default-jre; \
     rm -rf ${SOURCE_FILES}; \
     rm -rf /var/lib/apt/lists/*;
-    
+
 
 ENV LD_LIBRARY_PATH=${JAVA_LIBS}:$LD_LIBRARY_PATH

@@ -1,0 +1,83 @@
+name: DevDocker
+
+on:
+  pull_request:
+    branches:
+      - "master"
+  push:
+    branches:
+      - "master"
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  BuildSpecificImages:
+    name: "Build specific images"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      max-parallel: 8
+      matrix:
+        engines:
+          - image: "duckdb"
+          - image: "jdbc"
+          - image: "mongo"
+          - image: "mssql"
+          - image: "mysql"
+          - image: "oracle"
+          - image: "redis"
+          - image: "sqlite"
+    steps:
+      - uses: actions/checkout@master
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          file: ./v16/postgres_${{ matrix.engines.image }}.docker
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-${{ matrix.engines.image }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-${{ matrix.engines.image }}:${{github.run_number}}
+          outputs: ${{ github.event_name == 'pull_request' && 'type=cacheonly' || 'type=registry,push=true' }}
+  DeployDev:
+    name: "Build Datero"
+    needs: BuildDatero
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@master
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          file: ./datero/datero_engine_v16.docker
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          build-args: |
+            base_tag=16.4
+            mongo_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-mongo:${{github.run_number}}
+            mysql_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-mysql:${{github.run_number}}
+            oracle_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-oracle:${{github.run_number}}
+            sqlite_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-sqlite:${{github.run_number}}
+            redis_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-redis:${{github.run_number}}
+            duckdb_tag=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-duckdb:${{github.run_number}}
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-engine:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/datero-engine:${{github.run_number}}
+          outputs: ${{ github.event_name == 'pull_request' && 'type=cacheonly' || 'type=registry,push=true' }}

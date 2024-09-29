@@ -3,7 +3,7 @@ services:
     image: container-registry.oracle.com/database/express:21.3.0-xe
     container_name: oracle
     environment:
-      ORACLE_PWD: admin  # SYS, SYSTEM and PDBADMIN password
+      ORACLE_PWD: admin # SYS, SYSTEM and PDBADMIN password
     ports:
       - 1521:1521
     volumes:
@@ -15,9 +15,8 @@ services:
     #  timeout: 5s
     #  retries: 3
 
-
   postgres:
-    image: docker.io/chumaky/postgres_oracle_fdw:16.3_fdw2.6.0
+    image: docker.io/chumaky/postgres_oracle_fdw:16.4_fdw2.6.0
     container_name: postgres
     environment:
       POSTGRES_PASSWORD: postgres
@@ -28,6 +27,3 @@ services:
     depends_on:
       oracle:
         condition: service_healthy
-
-
-

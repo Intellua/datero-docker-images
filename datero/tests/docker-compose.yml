@@ -70,15 +70,15 @@ services:
     image: container-registry.oracle.com/database/express:21.3.0-xe
     container_name: datero_src_oracle
     environment:
-      ORACLE_PWD: admin   # password for SYS, SYSTEM and PDBADMIN
+      ORACLE_PWD: admin # password for SYS, SYSTEM and PDBADMIN
     ports:
-      - 1521:1521   # JDBC
-      - 5500:5500   # Enterprise Manager GUI
+      - 1521:1521 # JDBC
+      - 5500:5500 # Enterprise Manager GUI
     volumes:
       - ./oracle/customer_profiles.sql:/docker-entrypoint-initdb.d/startup/oracle_setup.sql
 
   datero:
-    image: docker.io/chumaky/datero_engine:16.3
+    image: docker.io/chumaky/datero_engine:16.4
     #image: docker.io/chumaky/datero:latest
     container_name: datero_test_engine
     environment:
@@ -98,11 +98,11 @@ services:
       - ../../tests/duckdb/json_files.duckdb:/data/json_files.duckdb
       - ../../tests/duckdb/json_files.duckdb.wal:/data/json_files.duckdb.wal
       # datero setup
-      - ./datero_setup.sql:/data/datero_setup.sql      
-      - ./config.yaml:/home/instance/config.yaml   
+      - ./datero_setup.sql:/data/datero_setup.sql
+      - ./config.yaml:/home/instance/config.yaml
       # TODO: implement waiting of the source services actually being ready via "wait-for-it.sh"
       # and run `datero_setup.sql` after that
-      # - ./datero_setup.sql:/docker-entrypoint-initdb.d/datero_setup.sql         
+      # - ./datero_setup.sql:/docker-entrypoint-initdb.d/datero_setup.sql
     depends_on:
       - mysql
       - postgres

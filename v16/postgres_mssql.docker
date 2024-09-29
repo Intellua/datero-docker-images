@@ -1,4 +1,4 @@
-ARG base_tag=16.3
+ARG base_tag=16.4
 FROM postgres:${base_tag}
 
 ARG pg_version=16
@@ -13,8 +13,8 @@ ARG fdw_url=https://github.com/tds-fdw/tds_fdw/archive/refs/heads/master.zip
 
 ARG source_files=/tmp/tds_fdw
 
-#ARG source_root=tds_fdw-REL-2_0_3 
-ARG source_root=tds_fdw-master 
+#ARG source_root=tds_fdw-REL-2_0_3
+ARG source_root=tds_fdw-master
 
 RUN apt-get update;
 
